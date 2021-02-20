@@ -1,17 +1,24 @@
+import pycom
+from network import WLAN
+import machine
 import time
 
-import board
-import busio
+# ---- Config ----
 
-import adafruit_vl53l0x
+wlan = WLAN(mode=WLAN.STA)
+pycom.heartbeat(False)
+wlan.connect(ssid='ssid', auth=(WLAN.WPA2, 'password!'))
 
-# Initialize I2C for SCL & SDA pins
-i2c = busio.I2C(board.SCL, board.SDA)
-vl53 = adafruit_vl53l0x.VL53L0X(i2c)
+# ---- Loop ----
 
+while not wlan.isconnected():
+    time.sleep(2)
+    pycom.rgbled(0xFF0000)
+    print("no connection")
+    machine.idle()
 
-
-# Print the range every second
-while True:
-    print("Range: {0}mm".format(vl53.range))
-    time.sleep(1.0)
+while wlan.isconnected():
+    print("WiFi connected succesfully")
+    time.sleep(1)
+    print(wlan.ifconfig())
+    pycom.rgbled(0x00FF00)
