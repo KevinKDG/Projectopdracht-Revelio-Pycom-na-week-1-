@@ -3,14 +3,15 @@ import socket
 import time
 import ubinascii
 import ustruct
-import ultrasoon
+from ultrasoon import *
 
 Europe = LoRa.EU868
 lora = LoRa(mode=LoRa.LORAWAN, region=LoRa.EU868)
 
-app_eui = ubinascii.unhexlify('70B3D57ED003E9D9')
-app_key = ubinascii.unhexlify('EB40EE167D05F35EF01D866802C758C3')
-dev_eui = ubinascii.unhexlify('70B3D57ED003E9D9')
+# Fill in your correct keys
+app_eui = ubinascii.unhexlify('70B3D57ED003E9D9') # App EUI
+app_key = ubinascii.unhexlify('EB40EE167D05F35EF01D866802C758C3') # App key
+dev_eui = ubinascii.unhexlify('70B3D57ED003E9D9') # Dev EUI
 
 def getlora():
     lora.join(activation=LoRa.OTAA, auth=(dev_eui, app_eui, app_key), timeout=0)
@@ -27,7 +28,7 @@ def senddata():
     s.setsockopt(socket.SOL_LORA, socket.SO_DR, 5)
     s.setblocking(True)
     meting = readsensor()
-    s.send(bytes(meting))
+    s.send(bytes(distance))
     s.send(packet)
 
     s.setblocking(False)

@@ -1,6 +1,7 @@
 from machine import UART
 import urequests as requests
 import time
+import machine
 
 def readsensor():
 
